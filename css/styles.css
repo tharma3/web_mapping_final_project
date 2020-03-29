@@ -1,80 +1,115 @@
-
-body { margin: 0; padding: 0; }
-h2, h3 {margin: 10px; font-size: 1.2em; }
-h3 {font-size: 1em; }
-p {font-size: 0.85em; margin: 10px; text-align: left; }
-
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-
-#menu {
-background: #fff;
-position: absolute;
-z-index: 1;
-top: 10px;
-right: 10px;
-border-radius: 3px;
-width: 120px;
-border: 1px solid rgba(0, 0, 0, 0.4);
-font-family: 'Open Sans', sans-serif;
+html, body {
+  height: 100%;
+  width: 100%;
+  margin:0;
+  font-family: 'lato';
 }
 
-#menu a {
-font-size: 13px;
-color: #404040;
-display: block;
-margin: 0;
-padding: 0;
-padding: 10px;
-text-decoration: none;
-border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-text-align: center;
+span, p {
+  margin: 15px 15px 15px 15px;
+  font-size: 10pt;
+
 }
 
-#menu a:last-child {
-border: none;
+/* sets map area to fill entire screen, margin-left creates space for the sidebar */
+#mapContainer {
+  height: 100%;
+  width: 100%;
+  background: lightgray;
+  margin-left:30%;
 }
 
-#menu a:hover {
-background-color: #f8f8f8;
-color: #404040;
-}
-
-#menu a.active {
-background-color: #3887be;
-color: #ffffff;
-}
-
-#menu a.active:hover {
-background: #3074a4;
-}
-
-/**
-* Set rules for how the map overlays
-* (information box and legend) will be displayed
-* on the page. */
-.map-overlay {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.8);
-  margin-right: 20px;
-  font-family: Arial, sans-serif;
-  overflow: auto;
-  border-radius: 3px;
-}
-
-#features {
+#sidebar {
+  height: 100%;
+  width: 30%;
+  position: fixed;
+  z-index: 1;
   top: 0;
-  height: 100px;
-  margin-top: 20px;
-  width: 250px;
+  left: 0;
+  background-color: #E5E5E5;
+  overflow-x: hidden;
+  padding: 20px;
+  margin: auto;
+
 }
 
-#legend {
-  padding: 10px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  line-height: 18px;
-  height: 150px;
-  margin-bottom: 40px;
-  width: 100px;
+/* Code for color styling of MapboxGL popups */
+/* from https://stackoverflow.com/questions/44554692/style-a-mapbox-popups-pointer-indicator */
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
+.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
+.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+  border-bottom-color: #262626;
+}
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
+.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
+.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+  border-top-color: #262626;
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: #262626;
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: #262626;
+}
+.mapboxgl-popup-content {
+  background-color: #262626;
+}
+
+
+h1, h2, h3, h5, h6 {
+  margin: 15px 15px 15px 15px;
+}
+
+#title {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
+  font-size: 24pt;
+  text-align: center;
+}
+
+.nav-item {
+  font-family: 'Raleway', sans-serif;
+}
+
+.btn {
+  margin: 2px;
+  font-weight: 500;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+/* wrapper container for centering first line of buttons */
+#buttons-container {
+  width: 100%;
+  text-align: center;
+}
+
+#buttonTypology {
+  width: 94%;
+  margin: 0 auto;
+}
+
+.legend-color-box {
+  height: 15px;
+  width: 15px;
+  float: left;
+  margin-left: 15px;
+  margin-top: 5px;
+
+}
+
+.tab-pane {
+  height:100%;
+  padding:15px;
+}
+
+.tab-content {
+  background-color: lavender;
+  border-style: groove;
+  border-radius: 15px;
+}
+
+.heading {
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold;
 }

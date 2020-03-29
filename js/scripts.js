@@ -1,115 +1,188 @@
+//mapboxGL token
 mapboxgl.accessToken = 'pk.eyJ1IjoidGhhcm1hMyIsImEiOiJjamkzazRtd3AyNWFyM2twZGpmNWp5Znh3In0.t0f4CwdP5o0wMM6adrU4Cg';
 
-var map = new mapboxgl.Map({
-container: 'map',
-style: 'mapbox://styles/mapbox/streets-v11',
-zoom: 11,
-center: [-74.012489,40.707970]
-});
+initialCenterPoint = [-73.913269, 40.687928]
+initialZoom = 11
 
-map.on('load', function() {
+// create an object to hold the initialization options for a mapboxGL map
+var initOptions = {
+  container: 'map-container', // put the map in this container
+  style: 'mapbox://styles/mapbox/light-v10', // use this basemap
+  center: initialCenterPoint, // initial view center
+  zoom: initialZoom, // initial view zoom level (0-18)
+};
 
-  var layers = ['0-10', '10-20', '20-50', '50-100', '100-200', '200-500', '500-1000', '1000+'];
-  var colors = ['#FFEDA0', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A', '#E31A1C', '#BD0026', '#800026'];
+// create the new map
+var map = new mapboxgl.Map(initOptions);
 
-  for (i = 0; i < layers.length; i++) {
-    var layer = layers[i];
-    var color = colors[i];
-    var item = document.createElement('div');
-    var key = document.createElement('span');
-    key.className = 'legend-key';
-    key.style.backgroundColor = color;
+// add zoom and rotation controls to the map.
+map.addControl(new mapboxgl.NavigationControl());
 
-    var value = document.createElement('span');
-    value.innerHTML = layer;
-    item.appendChild(key);
-    item.appendChild(value);
-    legend.appendChild(item);
-  }
+// Load map and initialize layers
+// Layers are initially hidden, and will change visual properties depending
+// on what data source is selected for the map through the various buttons
+map.on('style.load', function() {
+  $('.legend').hide();
+  $('.load-legend').show();
 
-  map.addSource('under_5', {
+  // sets up the geojson as a source in the map
+  map.addSource('census-data', {
     type: 'geojson',
-    data: 'mapbox://mapbox.2opop9hr'
+    data: './data/census_data.geojson',
   });
 
+  // initalize fill layer
   map.addLayer({
-    'id': 'museums',
-    'type': 'circle',
-    'source': 'museums',
-    'layout': {
-      'visibility': 'visible'
-    },
-    'paint': {
-      'circle-radius': 8,
-      'circle-color': 'rgba(55,148,179,1)'
-    },
-    'source-layer': 'museum-cusco'
-  });
+    id: 'tract-fill',
+    type: 'fill',
+    source: 'census-data',
+    paint: {
+      'fill-opacity': 0,
+    }
+  })
 
-
-  map.addSource('contours', {
-    type: 'vector',
-    url: 'mapbox://mapbox.mapbox-terrain-v2'
-  });
-
+  // add census tract lines layer
   map.addLayer({
-    'id': 'contours',
-    'type': 'line',
-    'source': 'contours',
-    'source-layer': 'contour',
-    'layout': {
-      'visibility': 'visible',
-      'line-join': 'round',
-      'line-cap': 'round'
-    },
-    'paint': {
-      'line-color': '#877b59',
-      'line-width': 1
+    id: 'typology-line',
+    type: 'line',
+    source: 'census-data',
+    paint: {
+      'line-opacity': 0,
+      'line-color': 'black',
+      'line-opacity': {
+        stops: [[12, 0], [14.8, 1]], // zoom-dependent opacity, the lines will fade in between zoom level 14 and 14.8
+      }
+    }
+  });
+
+  // // add an empty data source, which highlights the tract that a user clicks on
+  map.addSource('highlight-feature', {
+    type: 'geojson',
+    data: {
+      type: 'FeatureCollection',
+      features: []
+    }
+  })
+
+  // // add a layer for the highlighted tract boundary
+  map.addLayer({
+    id: 'highlight-line',
+    type: 'line',
+    source: 'highlight-feature',
+    paint: {
+      'line-width': 3,
+      'line-opacity': 0,
+      'line-color': 'red',
     }
   });
 
 });
 
-var toggleableLayerIds = ['contours', 'museums'];
+  // when the user clicks on the census tract map, do...
+  map.on('click', function(e) {
 
-for (var i = 0; i < toggleableLayerIds.length; i++) {
+    // selects the census tract features under the mouse
+    var features = map.queryRenderedFeatures(e.point, {
+      layers: ['tract-fill'],
+    });
 
-  var id = toggleableLayerIds[i];
+    // get the first feature from the array of returned features.
+    var tract = features[0]
 
-  var link = document.createElement('a');
-  link.href = '#';
-  link.className = 'active';
-  link.textContent = id;
+    if (tract) { // if there's a tract under the mouse, do...
+      map.getCanvas().style.cursor = 'pointer'; // make the cursor a pointer
 
-  link.onclick = function(e) {
-    var clickedLayer = this.textContent;
-    e.preventDefault();
-    e.stopPropagation();
+      // lookup the corresponding description for the typology
+      // var typologyDescription = tract.properties["typology"];
+      var ntaName = tract.properties["NTAName"];
 
-  var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+      // add popup to display typology of selected tract and detailed data
+      new mapboxgl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(
+          `<div id="popup" class="popup" style="z-index: 10;">` +
+          '<b> Neighborhood: </b>' + NTAName + " </br>" +
+          '<b> Total New Yorkers over 65: </b>' + numeral(tract.properties["over_65"]).format('0,0') + " </br>" +
+          '<b> Total New Yorkers over 75: </b>' + numeral(tract.properties["over_75"]).format('0,0') + " </br>" +
+          '<b> Total New Yorders over 85: </b>' + numeral(tract.properties["over_85"]).format('0,0') + " </br>" +
+          '</div>'
+        )
+        .addTo(map);
 
-  if (visibility === 'visible') {
-    map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-    this.className = '';
-  } else {
-    this.className = 'active';
-    map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-  }
+      // set this tract's polygon feature as the data for the highlight source
+      map.getSource('highlight-feature').setData(tract.geometry);
+    } else {
+      map.getCanvas().style.cursor = 'default'; // make the cursor default
 
-  };
-
-  var layers = document.getElementById('menu');
-  layers.appendChild(link);
-
-  map.on('mousemove', function(e) {
-  var states = map.queryRenderedFeatures(e.point, {
-    layers: ['statedata']
+      // reset the highlight source to an empty featurecollection
+      map.getSource('highlight-feature').setData({
+        type: 'FeatureCollection',
+        features: []
+      });
+    }
   });
 
-  if (states.length > 0) {
-    document.getElementById('pd').innerHTML = '<h3><strong>' + states[0].properties.name + '</strong></h3><p><strong><em>' + states[0].properties.density + '</strong> people per square mile</em></p>';
-  } else {
-    document.getElementById('pd').innerHTML = '<p>Hover over a state!</p>';
-  }
+//on button click, load map and legend for "All Tweets"
+$('#button_over_65').on('click', function() {
+  $('.legend').hide(); // hide all legend divs
+  $('.over_65-legend').show(); // only show the legend for the corresponding data
+
+  // set visual properties according the data source corresponding to the button
+  map.setPaintProperty('tract-fill', 'fill-opacity', 0.7);
+  map.setPaintProperty('tract-fill', 'fill-color', {
+    type: 'interval',
+    property: "over_65",
+    stops: [
+      [over_65_stops[0], over_65_colors[0]],
+      [over_65_stops[1], over_65_colors[1]],
+      [over_65_stops[2], over_65_colors[2]],
+      [over_65_stops[3], over_65_colors[3]],
+      [over_65_stops[4], over_65_colors[4]]
+    ]
+  });
+  map.setPaintProperty('highlight-line', 'line-opacity', 0.8);
+  map.setPaintProperty('highlight-line', 'line-color', "red");
+
 });
-}
+
+//on button click, load map and legend for "Local Tweets"
+$('#button_over_75').on('click', function() {
+  $('.legend').hide();
+  $('.over_75-legend').show();
+
+  map.setPaintProperty('tract-fill', 'fill-opacity', 0.7);
+  map.setPaintProperty('tract-fill', 'fill-color', {
+    type: 'interval',
+    property: "over_75",
+    stops: [
+      [over_75_stops[0], over_75_colors[0]],
+      [over_75_stops[1], over_75_colors[1]],
+      [over_75_stops[2], over_75_colors[2]],
+      [over_75_stops[3], over_75_colors[3]],
+      [over_75_stops[4], over_75_colors[4]]
+    ]
+  });
+  map.setPaintProperty('highlight-line', 'line-opacity', 0.8);
+  map.setPaintProperty('highlight-line', 'line-color', "grey");
+});
+
+//on button click, load map and legend for "Visitor Tweets"
+$('#button_over_85').on('click', function() {
+  $('.legend').hide();
+  $('.over_85-legend').show();
+
+  map.setPaintProperty('tract-fill', 'fill-opacity', 0.7);
+  map.setPaintProperty('tract-fill', 'fill-color', {
+    type: 'interval',
+    property: "over_85",
+    stops: [
+      [over_85_stops[0], over_85_colors[0]],
+      [over_85_stops[1], over_85_colors[1]],
+      [over_85_stops[2], over_85_colors[2]],
+      [over_85_stops[3], over_85_colors[3]],
+      [over_85_stops[4], over_85_colors[4]]
+    ]
+  });
+  map.setPaintProperty('highlight-line', 'line-opacity', 0.8);
+  map.setPaintProperty('highlight-line', 'line-color', "grey");
+});

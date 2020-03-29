@@ -2,27 +2,120 @@
 <html>
 
 <head>
+  <meta charset="utf-8">
+
+  <title>Vulnerable Populations Explorer</title>
+  <meta name="description" content="Explore where elderly New Yorkers live.">
+  <meta name="author" content="Martha Norrick">
+
+  <!-- import styles for MapBoxGL, NYCO Patterns, Google Fonts -->
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/cityofnewyork/access-nyc-patterns@v0.1.0/dist/styles/site-default.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Raleway|Lato" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+</head>
 
 <body>
+  <div id="map-container"></div>
+  <div id="sidebar">
+    <h3 id="title">Where are New York City's elders?</h3>
 
-<meta charset="utf-8" />
+    <!-- Buttons to toggle between display of different data on map.
+    The buttons are wrapped in containers for centering within the sidebar. -->
+    <div id="buttons-container">
+      <button type="button" class="btn" id="button_over_65">Over 65</button>
+      <button type="button" class="btn" id="button_over_75">Over 75</button>
+      <button type="button" class="btn" id="button_over_85">Over 85</button>
+    </div>
 
-<title>Vulnerable Populations Explorer</title>
+    <nav>
+      <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link" id="nav-legend-tab" data-toggle="tab" href="#nav-legend" role="tab" aria-controls="nav-contact" aria-selected="false"> <i class="fas fa-layer-group"></i> Legend</a>
+        <a class="nav-item nav-link active" id="nav-about-tab" data-toggle="tab" href="#nav-about" role="tab" aria-controls="nav-home" aria-selected="true"> <i class="fas fa-info-circle"></i> About</a>
+      </div>
 
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+        <h5 class="heading">About this Map</h5>
+        <p>This map explores where New York's elders are located using data from the US Census.
+          <b> Click on a button to show where New York's elders live. </b>
+          Once data is displayed, click on a census tract to view more information about the tract.</p>
 
-<script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script>
+      </div>
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css" rel="stylesheet" />
+      <div class="tab-pane fade" id="nav-legend" role="tabpanel" aria-labelledby="nav-legend-tab">
+        <div class="legend load-legend">
+          <p style="font-size: 12pt">Click a button to display the data.</p>
+
+        </div>
+        <!-- content of legend is programatically created in "functions.js"
+                    All legends have two classes, the overarching "legend" class and an additional class
+                    identifying the corresponding which dataset the legend belongs to -->
+        <div class="legend-over_65">
+          <h6>Total population, 65+ (ACS 5-Year 2018)</h6>
+        </div>
+
+        <div class="legend-over_75">
+          <h6>Total population, 75+ (ACS 5-Year 2018)</h6>
+        </div>
+
+        <div class="legend-over_85">
+          <h6>Total population, 85+ (ACS 5-Year 2018)</h6>
+        </div>
+
+        <div class="legend typology-legend">
+
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 
-<nav id="menu"></nav>
-<div id="map"></div>
-<div class='map-overlay' id='features'><h2>Census Tract</h2><div id='pd'><p>Hover to see information about NYC Census Tract.</p></div></div>
-<div class='map-overlay' id='legend'></div>
 
+  </div>
 
-
+  <!-- import MapboxGL, Bootstrap, Numeral, and other JS packages-->
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/scripts.js"></script>
 </body>
-</head>
+
+
+
+<!-- <div id="over85-legend" class="legend">
+    <h4>Population over 85</h4>
+    <div><span style="background-color: #08306b"></span>434+</div>
+    <div><span style="background-color: #2879b9"></span>225 to 434</div>
+    <div><span style="background-color: #73b3d8"></span>116 to 225</div>
+    <div><span style="background-color: #c8ddf0"></span>49 to 116</div>
+    <div><span style="background-color: ##f7fbff"></span>0 to 49</div>
+  </div>
+
+  <div id="over75-legend" class="legend" style="display: none;">
+    <h4>Population over 75</h4>
+    <div><span style="background-color: #00441b"></span>2,030+</div>
+    <div><span style="background-color: #2a924a"></span>745 to 2,030</div>
+    <div><span style="background-color: #7bc87c"></span>385 to 745</div>
+    <div><span style="background-color: #caeac3"></span>180 to 385</div>
+    <div><span style="background-color: #f7fcf5"></span>0 to 180</div>
+  </div>
+
+  <div id="over65-legend" class="legend" style="display: none;">
+    <h4>Population over 65</h4>
+    <div><span style="background-color: #67000d"></span>3,305+</div>
+    <div><span style="background-color: #d42020"></span>1,370 to 3,305</div>
+    <div><span style="background-color: #fc7050"></span>739 to 1,370</div>
+    <div><span style="background-color: #fdbea5"></span>370 to 739</div>
+    <div><span style="background-color: #fff5f0"></span>0 to 370</div>
+  </div> -->
+
+<!-- <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script> -->
+
+
 </html>
