@@ -31,6 +31,9 @@ map.on('style.load', function() {
     data: './data/census_data.geojson',
   });
 
+  // let's make sure the source got added by logging the current map state to the console
+  console.log(map.getStyle().sources)
+
   // initalize fill layer
   map.addLayer({
     id: 'tract-fill',
