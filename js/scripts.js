@@ -1,7 +1,7 @@
 //mapboxGL token
 mapboxgl.accessToken = 'pk.eyJ1IjoidGhhcm1hMyIsImEiOiJjamkzazRtd3AyNWFyM2twZGpmNWp5Znh3In0.t0f4CwdP5o0wMM6adrU4Cg';
 
-initialCenterPoint = [-73.913269, 40.687928]
+initialCenterPoint = [-73.906130,40.718147]
 initialZoom = 11
 
 // create an object to hold the initialization options for a mapboxGL map
@@ -40,7 +40,7 @@ map.on('style.load', function() {
     type: 'fill',
     source: 'census-data',
     paint: {
-      'fill-opacity': 1,
+      'fill-opacity': 0,
     }
   })
 
