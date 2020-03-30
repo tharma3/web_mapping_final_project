@@ -40,7 +40,7 @@ map.on('style.load', function() {
     type: 'fill',
     source: 'census-data',
     paint: {
-      'fill-opacity': 0,
+      'fill-opacity': 1,
     }
   })
 
@@ -53,7 +53,10 @@ map.on('style.load', function() {
       'line-opacity': 0,
       'line-color': 'black',
       'line-opacity': {
-        stops: [[12, 0], [14.8, 1]], // zoom-dependent opacity, the lines will fade in between zoom level 14 and 14.8
+        stops: [
+          [12, 0],
+          [14.8, 1]
+        ], // zoom-dependent opacity, the lines will fade in between zoom level 14 and 14.8
       }
     }
   });
@@ -81,49 +84,49 @@ map.on('style.load', function() {
 
 });
 
-  // when the user clicks on the census tract map, do...
-  map.on('click', function(e) {
+// when the user clicks on the census tract map, do...
+map.on('click', function(e) {
 
-    // selects the census tract features under the mouse
-    var features = map.queryRenderedFeatures(e.point, {
-      layers: ['tract-fill'],
-    });
-
-    // get the first feature from the array of returned features.
-    var tract = features[0]
-
-    if (tract) { // if there's a tract under the mouse, do...
-      map.getCanvas().style.cursor = 'pointer'; // make the cursor a pointer
-
-      // lookup the corresponding description for the typology
-      // var typologyDescription = tract.properties["typology"];
-      var ntaName = tract.properties["NTAName"];
-
-      // add popup to display typology of selected tract and detailed data
-      new mapboxgl.Popup()
-        .setLngLat(e.lngLat)
-        .setHTML(
-          `<div id="popup" class="popup" style="z-index: 10;">` +
-          '<b> Neighborhood: </b>' + NTAName + " </br>" +
-          '<b> Total New Yorkers over 65: </b>' + numeral(tract.properties["over_65"]).format('0,0') + " </br>" +
-          '<b> Total New Yorkers over 75: </b>' + numeral(tract.properties["over_75"]).format('0,0') + " </br>" +
-          '<b> Total New Yorders over 85: </b>' + numeral(tract.properties["over_85"]).format('0,0') + " </br>" +
-          '</div>'
-        )
-        .addTo(map);
-
-      // set this tract's polygon feature as the data for the highlight source
-      map.getSource('highlight-feature').setData(tract.geometry);
-    } else {
-      map.getCanvas().style.cursor = 'default'; // make the cursor default
-
-      // reset the highlight source to an empty featurecollection
-      map.getSource('highlight-feature').setData({
-        type: 'FeatureCollection',
-        features: []
-      });
-    }
+  // selects the census tract features under the mouse
+  var features = map.queryRenderedFeatures(e.point, {
+    layers: ['tract-fill'],
   });
+
+  // get the first feature from the array of returned features.
+  var tract = features[0]
+
+  if (tract) { // if there's a tract under the mouse, do...
+    map.getCanvas().style.cursor = 'pointer'; // make the cursor a pointer
+
+    // lookup the corresponding description for the typology
+    // var typologyDescription = tract.properties["typology"];
+    var ntaName = tract.properties["NTAName"];
+
+    // add popup to display typology of selected tract and detailed data
+    new mapboxgl.Popup()
+      .setLngLat(e.lngLat)
+      .setHTML(
+        `<div id="popup" class="popup" style="z-index: 10;">` +
+        '<b> Neighborhood: </b>' + NTAName + " </br>" +
+        '<b> Total New Yorkers over 65: </b>' + numeral(tract.properties["over_65"]).format('0,0') + " </br>" +
+        '<b> Total New Yorkers over 75: </b>' + numeral(tract.properties["over_75"]).format('0,0') + " </br>" +
+        '<b> Total New Yorders over 85: </b>' + numeral(tract.properties["over_85"]).format('0,0') + " </br>" +
+        '</div>'
+      )
+      .addTo(map);
+
+    // set this tract's polygon feature as the data for the highlight source
+    map.getSource('highlight-feature').setData(tract.geometry);
+  } else {
+    map.getCanvas().style.cursor = 'default'; // make the cursor default
+
+    // reset the highlight source to an empty featurecollection
+    map.getSource('highlight-feature').setData({
+      type: 'FeatureCollection',
+      features: []
+    });
+  }
+});
 
 //on button click, load map and legend for "All Tweets"
 $('#button_over_65').on('click', function() {
@@ -134,7 +137,7 @@ $('#button_over_65').on('click', function() {
   map.setPaintProperty('tract-fill', 'fill-opacity', 0.7);
   map.setPaintProperty('tract-fill', 'fill-color', {
     type: 'interval',
-    property: "over_65",
+    property: 'over_65',
     stops: [
       [over_65_stops[0], over_65_colors[0]],
       [over_65_stops[1], over_65_colors[1]],
@@ -156,7 +159,7 @@ $('#button_over_75').on('click', function() {
   map.setPaintProperty('tract-fill', 'fill-opacity', 0.7);
   map.setPaintProperty('tract-fill', 'fill-color', {
     type: 'interval',
-    property: "over_75",
+    property: 'over_75',
     stops: [
       [over_75_stops[0], over_75_colors[0]],
       [over_75_stops[1], over_75_colors[1]],
@@ -177,7 +180,7 @@ $('#button_over_85').on('click', function() {
   map.setPaintProperty('tract-fill', 'fill-opacity', 0.7);
   map.setPaintProperty('tract-fill', 'fill-color', {
     type: 'interval',
-    property: "over_85",
+    property: 'over_85',
     stops: [
       [over_85_stops[0], over_85_colors[0]],
       [over_85_stops[1], over_85_colors[1]],

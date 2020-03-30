@@ -12,7 +12,7 @@ span, p {
 }
 
 /* sets map area to fill entire screen, margin-left creates space for the sidebar */
-#mapContainer {
+#map-container {
   height: 100%;
   width: 100%;
   background: lightgray;
