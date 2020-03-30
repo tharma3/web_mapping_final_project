@@ -2,26 +2,35 @@
 <html>
 
 <head>
+  <!-- load styles and fonts -->
   <meta charset="utf-8">
 
   <title>Vulnerable Populations Explorer</title>
   <meta name="description" content="Explore where elderly New Yorkers live.">
   <meta name="author" content="Martha Norrick">
 
+  <!-- add favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+
   <!-- import styles for MapBoxGL, NYCO Patterns, Google Fonts -->
-  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet" />
+  <!-- <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css" rel="stylesheet" /> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/gh/cityofnewyork/access-nyc-patterns@v0.1.0/dist/styles/site-default.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Raleway|Lato" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link href='css/styles.css' rel='stylesheet'>
+
 </head>
 
 <body>
+  <!-- create map container, sidebar, and menu items -->
   <div id="map-container"></div>
   <div id="sidebar">
     <h3 id="title">Where are New York City's elders?</h3>
 
-    <!-- Buttons to toggle between display of different data on map.
-    The buttons are wrapped in containers for centering within the sidebar. -->
+    <!-- Buttons to toggle between display of different data on map. -->
     <div id="buttons-container">
       <button type="button" class="btn" id="button_over_65">Over 65</button>
       <button type="button" class="btn" id="button_over_75">Over 75</button>
@@ -30,16 +39,17 @@
 
     <div class="tab-pane fade" id="nav-legend" role="tabpanel" aria-labelledby="nav-legend-tab">
       <div class="legend load-legend">
-        <p style="font-size: 12pt">Click a button to display the data.</p>
+        <p style="font-size: 12pt">Click a button to show where New Yorkers of that age live.</p>
 
       </div>
 
     <div class="tab-content" id="nav-tabContent">
       <div class="tab-pane fade show active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
         <h5 class="heading">About this Map</h5>
-        <p>This map explores where New York's elders are located using data from the US Census.
-          <b> Click on a button to show where New York's elders live. </b>
-          Once data is displayed, click on a census tract to view more information about the tract.</p>
+        <p>This map explores where New York's elders are concentrated using data from the US Census.
+          This information is important particularly for COVID-19 social service and health support.
+          <b> Click on a button to show the population by census tract for each age band. </b>
+          You can also click on a census tract to view more information about the tract.</p>
 
       </div>
 
@@ -70,43 +80,11 @@
   <!-- import MapboxGL, Bootstrap, Numeral, and other JS packages-->
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js'></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
   <script src="js/functions.js"></script>
   <script src="js/scripts.js"></script>
 </body>
-
-
-
-<!-- <div id="over85-legend" class="legend">
-    <h4>Population over 85</h4>
-    <div><span style="background-color: #08306b"></span>434+</div>
-    <div><span style="background-color: #2879b9"></span>225 to 434</div>
-    <div><span style="background-color: #73b3d8"></span>116 to 225</div>
-    <div><span style="background-color: #c8ddf0"></span>49 to 116</div>
-    <div><span style="background-color: ##f7fbff"></span>0 to 49</div>
-  </div>
-
-  <div id="over75-legend" class="legend" style="display: none;">
-    <h4>Population over 75</h4>
-    <div><span style="background-color: #00441b"></span>2,030+</div>
-    <div><span style="background-color: #2a924a"></span>745 to 2,030</div>
-    <div><span style="background-color: #7bc87c"></span>385 to 745</div>
-    <div><span style="background-color: #caeac3"></span>180 to 385</div>
-    <div><span style="background-color: #f7fcf5"></span>0 to 180</div>
-  </div>
-
-  <div id="over65-legend" class="legend" style="display: none;">
-    <h4>Population over 65</h4>
-    <div><span style="background-color: #67000d"></span>3,305+</div>
-    <div><span style="background-color: #d42020"></span>1,370 to 3,305</div>
-    <div><span style="background-color: #fc7050"></span>739 to 1,370</div>
-    <div><span style="background-color: #fdbea5"></span>370 to 739</div>
-    <div><span style="background-color: #fff5f0"></span>0 to 370</div>
-  </div> -->
-
-<!-- <script src="https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js"></script> -->
-
 
 </html>

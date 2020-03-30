@@ -2,7 +2,7 @@ html, body {
   height: 100%;
   width: 100%;
   margin:0;
-  font-family: 'lato';
+  font-family: 'quicksand', sans-serif;
 }
 
 span, p {
@@ -15,65 +15,42 @@ span, p {
 #map-container {
   height: 100%;
   width: 100%;
-  background: lightgray;
-  margin-left:30%;
+  background: #CDD8EF;
+  margin-left:28%;
 }
 
 #sidebar {
   height: 100%;
-  width: 30%;
+  width: 28%;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #E5E5E5;
+  background-color: #F3F3F3;
   overflow-x: hidden;
-  padding: 20px;
+  padding: 10px;
   margin: auto;
 
 }
-
-/* Code for color styling of MapboxGL popups */
-/* from https://stackoverflow.com/questions/44554692/style-a-mapbox-popups-pointer-indicator */
-.mapboxgl-popup-anchor-top .mapboxgl-popup-tip,
-.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip,
-.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
-  border-bottom-color: #262626;
-}
-.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip,
-.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip,
-.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
-  border-top-color: #262626;
-}
-.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-  border-right-color: #262626;
-}
-.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
-  border-left-color: #262626;
-}
-.mapboxgl-popup-content {
-  background-color: #262626;
-}
-
 
 h1, h2, h3, h5, h6 {
   margin: 15px 15px 15px 15px;
 }
 
 #title {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'quicksand', sans-serif;
   font-weight: bold;
-  font-size: 24pt;
+  font-size: 20pt;
   text-align: center;
 }
 
 .nav-item {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'quicksand', sans-serif;
 }
 
 .btn {
-  margin: 2px;
-  font-weight: 500;
+  margin: 3px;
+  font-weight: 400;
   border-radius: 5px;
   display: inline-block;
 }
@@ -85,7 +62,7 @@ h1, h2, h3, h5, h6 {
 }
 
 #buttonTypology {
-  width: 94%;
+  width: 70%;
   margin: 0 auto;
 }
 
@@ -104,12 +81,12 @@ h1, h2, h3, h5, h6 {
 }
 
 .tab-content {
-  background-color: lavender;
+  background-color: #FFEECD;
   border-style: groove;
   border-radius: 15px;
 }
 
 .heading {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'quicksand', sans-serif;
   font-weight: bold;
 }

@@ -1,8 +1,8 @@
 //mapboxGL token
 mapboxgl.accessToken = 'pk.eyJ1IjoidGhhcm1hMyIsImEiOiJjamkzazRtd3AyNWFyM2twZGpmNWp5Znh3In0.t0f4CwdP5o0wMM6adrU4Cg';
 
-initialCenterPoint = [-73.906130,40.718147]
-initialZoom = 11
+initialCenterPoint = [-73.876855,40.718538]
+initialZoom = 10
 
 // create an object to hold the initialization options for a mapboxGL map
 var initOptions = {
@@ -40,7 +40,8 @@ map.on('style.load', function() {
     type: 'fill',
     source: 'census-data',
     paint: {
-      'fill-opacity': 0,
+      'fill-opacity': 0.25
+      // 'fill-color': '#C1C6CB',
     }
   })
 
@@ -106,8 +107,8 @@ map.on('click', function(e) {
     new mapboxgl.Popup()
       .setLngLat(e.lngLat)
       .setHTML(
-        `<div id="popup" class="popup" style="z-index: 10;">` +
-        '<b> Neighborhood: </b>' + NTAName + " </br>" +
+        `<div id="popup" class="popup" style="z-index: 8;">` +
+        '<b> Neighborhood: </b>' + ntaName + " </br>" +
         '<b> Total New Yorkers over 65: </b>' + numeral(tract.properties["over_65"]).format('0,0') + " </br>" +
         '<b> Total New Yorkers over 75: </b>' + numeral(tract.properties["over_75"]).format('0,0') + " </br>" +
         '<b> Total New Yorders over 85: </b>' + numeral(tract.properties["over_85"]).format('0,0') + " </br>" +
